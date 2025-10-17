@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Bagley IA</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background-color: #121212; color: white; text-align: center; margin: 0; padding: 0; }
+    h1 { background-color: #1f1f1f; padding: 15px; margin: 0; }
+    textarea { width: 90%; height: 100px; margin-top: 20px; border-radius: 10px; border: none; padding: 10px; font-size: 16px; }
+    button { margin-top: 10px; padding: 12px 25px; background-color: #3498db; color: white; border: none; border-radius: 10px; font-size: 16px; cursor: pointer; }
+    button:hover { background-color: #2980b9; }
+    select { margin-top: 15px; padding: 10px; border-radius: 10px; font-size: 16px; }
+    #respuesta { margin: 20px auto; width: 90%; text-align: left; background-color: #1f1f1f; border-radius: 10px; padding: 15px; min-height: 100px; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+  <h1>🤖 Bagley IA</h1>
+
+  <label for="modo">Modo:</label><br>
+  <select id="modo">
+    <option value="psicologo">🧠 Psicólogo</option>
+    <option value="deberes">📘 Deberes</option>
+    <option value="programacion" selected>💻 Programación</option>
+  </select><br>
+
+  <textarea id="entrada" placeholder="Escribe algo para Bagley..."></textarea><br>
+  <button onclick="enviar()">Enviar</button>
+
+  <div id="respuesta">Aquí aparecerá la respuesta de Bagley...</div>
+
+  <script>
+    async function enviar() {
+      const mensaje = document.getElementById('entrada').value;
+      const modo = document.getElementById('modo').value;
+      if (!mensaje.trim()) return;
+      document.getElementById('respuesta').innerText = "Bagley está pensando...";
+      const res = await fetch('/responder', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({mensaje, modo})
+      });
+      const data = await res.json();
+      document.getElementById('respuesta').innerText = data.respuesta;
+    }
+  </script>
+</body>
+</html>
